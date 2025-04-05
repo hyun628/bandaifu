@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>청소당번 뽑기</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>랜덤 건담 뽑기기</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,58 +11,18 @@
   <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- Google Font (선택) -->
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Pretendard', sans-serif;
-    }
-  </style>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-r from-blue-100 to-green-100 min-h-screen flex items-center justify-center">
+<body class="bg-gradient-to-r from-indigo-200 to-purple-200 min-h-screen flex items-center justify-center px-4">
 
-  <div class="bg-white shadow-xl rounded-2xl p-10 max-w-md w-full text-center">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">청소당번 뽑기</h1>
-    <button id="drawButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition">
-      당번 뽑기 🎲
+  <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">🎮 랜덤 건담 뽑기</h1>
+    <button id="drawButton" class="draw-button">
+      모빌슈트 뽑기 🎲
     </button>
-    <div id="result" class="mt-8 flex flex-wrap justify-center gap-3"></div>
   </div>
 
-  <script>
-    function getRandomNumbers(count, max) {
-      const numbers = new Set();
-      while (numbers.size < count) {
-        const num = Math.floor(Math.random() * max) + 1;
-        numbers.add(num);
-      }
-      return Array.from(numbers).sort((a, b) => a - b);
-    }
-
-    document.getElementById("drawButton").addEventListener("click", () => {
-      const numbers = getRandomNumbers(5, 25);
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "";
-
-      numbers.forEach(num => {
-        const badge = document.createElement("div");
-        badge.className = "bg-green-200 text-green-800 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg shadow";
-        badge.textContent = num;
-        resultDiv.appendChild(badge);
-      });
-
-      // SweetAlert2 팝업
-      Swal.fire({
-        title: '청소당번 🎉',
-        html: `<div class="flex justify-center gap-2 mt-2">${numbers.map(n => `<span style="display:inline-block;background:#c3f2c3;padding:10px 14px;border-radius:12px;font-weight:bold;">${n}</span>`).join('')}</div>`,
-        icon: 'success',
-        confirmButtonText: '확인',
-        backdrop: true,
-        customClass: {
-          popup: 'rounded-xl'
-        }
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
