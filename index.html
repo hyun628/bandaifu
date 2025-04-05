@@ -3,89 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>건담 랜덤 뽑기</title>
+  <title>랜덤 건담 뽑기</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
     }
 
-    header {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 20px;
-      box-sizing: border-box;
-    }
-
-    #resetBtn {
-      background-color: #ccc;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      cursor: pointer;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #2c2c2c;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     h1 {
-      text-align: center;
-      margin-top: 10px;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
     }
 
-    #container {
-      margin-top: 20px;
-      text-align: center;
+    img {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      border-radius: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    #mobileSuitImage {
-      max-width: 300px;
-      height: 400px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 20px auto;
+    img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+      cursor: pointer;
     }
 
-    #details {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    #drawBtn {
-      position: fixed;
-      bottom: 30px;
-      background-color: #007bff;
-      color: white;
-      padding: 12px 24px;
+    button, #reset-button {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
       border: none;
       border-radius: 10px;
+      background-color: #007bff;
+      color: white;
       cursor: pointer;
-      font-size: 16px;
+      transition: background 0.2s;
     }
 
-    #startMessage {
-      font-size: 20px;
-      margin-top: 50px;
+    button:hover, #reset-button:hover {
+      background-color: #0056b3;
+    }
+
+    #reset-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .info {
+      margin-top: 1.5rem;
+    }
+
+    .info h2 {
+      margin: 0.5rem 0;
+      font-size: 1.4rem;
+    }
+
+    .info p {
+      margin: 0.2rem 0;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <button id="resetBtn">초기화</button>
-  </header>
-
-  <h1>모빌슈트 랜덤 뽑기</h1>
-
-  <div id="container">
-    <p id="startMessage">버튼을 눌러 건담을 뽑아보세요!</p>
+  <button id="reset-button" onclick="resetGundam()">초기화</button>
+  <div class="container">
+    <h1>✨ 랜덤 건담 뽑기 ✨</h1>
+    <a id="gundam-link" href="#" target="_blank">
+      <img id="gundam-img" src="" alt="건담 이미지">
+    </a>
+    <div class="info">
+      <h2 id="gundam-name">이름</h2>
+      <p id="gundam-series">시리즈</p>
+      <p id="gundam-pilot">파일럿</p>
+    </div>
+    <button onclick="drawRandomGundam()">다시 뽑기</button>
   </div>
-
-  <button id="drawBtn">다시 뽑기</button>
 
   <script>
     const mobileSuits = [
@@ -93,86 +98,89 @@
         name: "RX-78-2 건담",
         series: "기동전사 건담 (UC 0079)",
         pilot: "아무로 레이",
-        image: "https://i.namu.wiki/i/GQ_sXV0M5d17G5uKSQ7widEAj_DBsmbJt3dKjqChAO9xOtcnUIt3LugJqbZ8Bh_IcAU6W1uWwbKYQtVFTP5t-g.webp"
+        image: "https://i.namu.wiki/i/GQ_sXV0M5d17G5uKSQ7widEAj_DBsmbJt3dKjqChAO9xOtcnUIt3LugJqbZ8Bh_IcAU6W1uWwbKYQtVFTP5t-g.webp",
+        link: "https://namu.wiki/w/%EA%B1%B4%EB%8B%B4"
       },
       {
         name: "ZGMF-X10A 프리덤 건담",
         series: "기동전사 건담 SEED",
         pilot: "키라 야마토",
-        image: "https://i.namu.wiki/i/z2JYc18MJigbL0yAUoKnPz29Uz4-KylHphZPlDwodUYMmRWc6jZori-aXq76Ubct8DKrXUZPzpWojirqGD-qPQ.webp"
+        image: "https://i.namu.wiki/i/z2JYc18MJigbL0yAUoKnPz29Uz4-KylHphZPlDwodUYMmRWc6jZori-aXq76Ubct8DKrXUZPzpWojirqGD-qPQ.webp",
+        link: "https://namu.wiki/w/%ED%94%84%EB%A6%AC%EB%8D%A4%20%EA%B1%B4%EB%8B%B4"
       },
       {
         name: "ASW-G-08 발바토스",
         series: "기동전사 건담 철혈의 오펀스",
         pilot: "미카즈키 아우구스",
-        image: "https://i.namu.wiki/i/m2jC0fqdYu7MUVcWF0XnJXkh93xiRa51Zig84v0A45ekLio1JiByBc2Q5fBzSrP8aEw0TOD1OR4Vmo2mFlwZcw.webp"
+        image: "https://i.namu.wiki/i/m2jC0fqdYu7MUVcWF0XnJXkh93xiRa51Zig84v0A45ekLio1JiByBc2Q5fBzSrP8aEw0TOD1OR4Vmo2mFlwZcw.webp",
+        link: "http://namu.wiki/w/%EA%B1%B4%EB%8B%B4%20%EB%B0%9C%EB%B0%94%ED%86%A0%EC%8A%A4"
       },
       {
         name: "MS-06 자쿠 II",
         series: "기동전사 건담 (UC 0079)",
         pilot: "샤아 아즈나블",
-        image: "https://i.namu.wiki/i/vd8QRNgAfGrrsbt2uMb61v6Xb4zqTnadgiZZ8r_o7cG7lD01Wa92ZA7BscGNfgpVxj3rol9znC5J4breDqyOSw.webp"
+        image: "https://i.namu.wiki/i/vd8QRNgAfGrrsbt2uMb61v6Xb4zqTnadgiZZ8r_o7cG7lD01Wa92ZA7BscGNfgpVxj3rol9znC5J4breDqyOSw.webp",
+        link: "https://namu.wiki/w/%EC%83%A4%EC%95%84%20%EC%A0%84%EC%9A%A9%20%EC%9E%90%EC%BF%A0%20II"
       },
       {
         name: "RX-0 유니콘 건담",
         series: "기동전사 건담 UC",
         pilot: "바나지 링크스",
-        image: "https://i.namu.wiki/i/vwUPzmAx-5c_p1QWn1Iz7BNYJtPdJlESXy3-Tg9rjRkwAZ036TVhh3IDqyCZ4xWDhYDqpzitgeu5w6ipv0R2tw.webp"
+        image: "https://i.namu.wiki/i/vwUPzmAx-5c_p1QWn1Iz7BNYJtPdJlESXy3-Tg9rjRkwAZ036TVhh3IDqyCZ4xWDhYDqpzitgeu5w6ipv0R2tw.webp",
+        link: "https://namu.wiki/w/%EC%9C%A0%EB%8B%88%EC%BD%98%20%EA%B1%B4%EB%8B%B4"
       },
       {
         name: "GN-001 엑시아",
         series: "기동전사 건담 00",
         pilot: "세츠나 F 세이에이",
-        image: "https://i.namu.wiki/i/PJZpGHZa9LfcVRNQKjFRckUb7KwAS6gM9TfgVcrdj7a0dEeUMpvU-m0o7NPcXUGs5XZ8Asfg3QRsOjIHbbCR5w.webp"
+        image: "https://i.namu.wiki/i/PJZpGHZa9LfcVRNQKjFRckUb7KwAS6gM9TfgVcrdj7a0dEeUMpvU-m0o7NPcXUGs5XZ8Asfg3QRsOjIHbbCR5w.webp",
+        link: "https://namu.wiki/w/%EA%B1%B4%EB%8B%B4%20%EC%97%91%EC%8B%9C%EC%95%84"
       },
       {
         name: "XXXG-00W0 윙 건담 제로",
         series: "신기동전기 건담W",
         pilot: "히이로 유이",
-        image: "https://i.namu.wiki/i/CQcXDMZlKwM8Y9bg7ia_y8WsQLOvk6TqBNcOZ62S8Qw0JQ-Y5x-HFwX0v2RZltVBDGZeFYLBPT0ac1eZXfpjFA.webp"
+        image: "https://i.namu.wiki/i/CQcXDMZlKwM8Y9bg7ia_y8WsQLOvk6TqBNcOZ62S8Qw0JQ-Y5x-HFwX0v2RZltVBDGZeFYLBPT0ac1eZXfpjFA.webp",
+        link: "https://namu.wiki/w/%EC%9C%99%20%EA%B1%B4%EB%8B%B4%20%EC%A0%9C%EB%A1%9C(EW)"
       },
       {
         name: "MSN-04 사자비",
         series: "기동전사 건담 역습의 샤아",
         pilot: "샤아 아즈나블",
-        image: "https://i.namu.wiki/i/owVREYnmRZtq4ksgHBe4q0Lgs5ybqTImBLQup6aFRLU4oxciU2o_qIzIBWj6s26yJYqP6Lmskn4wZb26CIz6Jg.webp"
+        image: "https://i.namu.wiki/i/owVREYnmRZtq4ksgHBe4q0Lgs5ybqTImBLQup6aFRLU4oxciU2o_qIzIBWj6s26yJYqP6Lmskn4wZb26CIz6Jg.webp",
+        link: "https://namu.wiki/w/%EC%82%AC%EC%9E%90%EB%B9%84"
       },
       {
         name: "RX-93 ν건담",
         series: "기동전사 건담 역습의 샤아",
         pilot: "아무로 레이",
-        image: "https://i.namu.wiki/i/5Sf43KuGDFwTnmkN0uKLgUGwPGtVqHdxuxeHvBSL6_jZxJfCX4mM1fX2JGZYTNAqKtBQ7V1vCqLsh4KtL-yntQ.webp"
+        image: "https://i.namu.wiki/i/5Sf43KuGDFwTnmkN0uKLgUGwPGtVqHdxuxeHvBSL6_jZxJfCX4mM1fX2JGZYTNAqKtBQ7V1vCqLsh4KtL-yntQ.webp",
+        link: "https://namu.wiki/w/%EB%89%B4%20%EA%B1%B4%EB%8B%B4"
       },
       {
         name: "∀ 건담",
         series: "턴에이 건담",
         pilot: "로랑 세악",
-        image: "https://i.namu.wiki/i/yPas79PjHdhh4m22H-ycVi2mQt7ejq5NfgfHRp4P5fbUM7oQ28p7-beqMihzZuEId-Ias-UL01B-_-KL5mY-qg.webp"
+        image: "https://i.namu.wiki/i/yPas79PjHdhh4m22H-ycVi2mQt7ejq5NfgfHRp4P5fbUM7oQ28p7-beqMihzZuEId-Ias-UL01B-_-KL5mY-qg.webp",
+        link: "https://namu.wiki/w/%E2%88%80%20%EA%B1%B4%EB%8B%B4"
       }
     ];
 
-    const container = document.getElementById("container");
-    const drawBtn = document.getElementById("drawBtn");
-    const resetBtn = document.getElementById("resetBtn");
-
-    function drawMobileSuit() {
+    function drawRandomGundam() {
       const random = mobileSuits[Math.floor(Math.random() * mobileSuits.length)];
-      container.innerHTML = `
-        <img id="mobileSuitImage" src="${random.image}" alt="${random.name}" />
-        <div id="details">
-          <strong>${random.name}</strong><br>
-          ${random.series}<br>
-          파일럿: ${random.pilot}
-        </div>
-      `;
+      document.getElementById('gundam-img').src = random.image;
+      document.getElementById('gundam-name').textContent = random.name;
+      document.getElementById('gundam-series').textContent = `시리즈: ${random.series}`;
+      document.getElementById('gundam-pilot').textContent = `파일럿: ${random.pilot}`;
+      document.getElementById('gundam-link').href = random.link;
     }
 
-    function reset() {
-      container.innerHTML = `<p id="startMessage">버튼을 눌러 건담을 뽑아보세요!</p>`;
+    function resetGundam() {
+      location.reload();
     }
 
-    drawBtn.addEventListener("click", drawMobileSuit);
-    resetBtn.addEventListener("click", reset);
+    // 페이지 로드시 자동 실행
+    drawRandomGundam();
   </script>
 </body>
 </html>
